@@ -9,6 +9,15 @@ public class Token {
   private TokenType type;
   private String value;
 
+  public Token(TokenType type) {
+    this.type = type;
+  }
+
+  public Token(TokenType type, char value) {
+    this.type = type;
+    this.value = String.valueOf(value);
+  }
+
   public Token(TokenType type, String value) {
     this.type = type;
     this.value = value;
