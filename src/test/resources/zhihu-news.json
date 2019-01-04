@@ -1,0 +1,98 @@
+{
+  "date": "20190104",
+  "stories": [
+    {
+      "title": "2018 年度盘点 · 说一个注定会被 AI 取代的职业",
+      "ga_prefix": "010409",
+      "images": [
+        "https://pic2.zhimg.com/v2-9b1e9b1024a43bb44099bf5db735750d.jpg"
+      ],
+      "multipic": true,
+      "type": 0,
+      "id": 9704987
+    },
+    {
+      "title": "世间再无 S.H.E",
+      "ga_prefix": "010409",
+      "images": [
+        "https://pic3.zhimg.com/v2-17041488b5dbf08fde87039bee3b75a2.jpg"
+      ],
+      "multipic": true,
+      "type": 0,
+      "id": 9704991
+    },
+    {
+      "images": [
+        "https://pic3.zhimg.com/v2-91894d3be4f83442d5066e4b35529892.jpg"
+      ],
+      "type": 0,
+      "id": 9705000,
+      "ga_prefix": "010408",
+      "title": "只有最短的梗，才有最长的寿命"
+    },
+    {
+      "images": [
+        "https://pic2.zhimg.com/v2-bea2e8ca61e06720946967b61133f38d.jpg"
+      ],
+      "type": 0,
+      "id": 9704989,
+      "ga_prefix": "010407",
+      "title": "白银案审讯民警：「他说，他觉得心里慌，就要杀个人」"
+    },
+    {
+      "images": [
+        "https://pic4.zhimg.com/v2-ddc698caf43879c7bdf153695f9c5b43.jpg"
+      ],
+      "type": 0,
+      "id": 9704981,
+      "ga_prefix": "010407",
+      "title": "「没想到中国会这样」的苹果，与它的重重困局"
+    },
+    {
+      "images": [
+        "https://pic4.zhimg.com/v2-51e9ba99d6f122435e690a84db992897.jpg"
+      ],
+      "type": 0,
+      "id": 9704967,
+      "ga_prefix": "010406",
+      "title": "瞎扯 · 如何正确地吐槽"
+    }
+  ],
+  "top_stories": [
+    {
+      "image": "https://pic4.zhimg.com/v2-b9e869e30d1f095a1f83c606ead23097.jpg",
+      "type": 0,
+      "id": 9704981,
+      "ga_prefix": "010407",
+      "title": "「没想到中国会这样」的苹果，与它的重重困局"
+    },
+    {
+      "image": "https://pic4.zhimg.com/v2-480ded07433d335c7386b1a8b8480497.jpg",
+      "type": 0,
+      "id": 9704989,
+      "ga_prefix": "010407",
+      "title": "白银案审讯民警：「他说，他觉得心里慌，就要杀个人」"
+    },
+    {
+      "image": "https://pic1.zhimg.com/v2-c1416f2e4ae753f02c59c19ab0af4c40.jpg",
+      "type": 0,
+      "id": 9704846,
+      "ga_prefix": "010321",
+      "title": "《黑镜》的竞争对手不是游戏，而是抖音"
+    },
+    {
+      "image": "https://pic3.zhimg.com/v2-3dc94f206bf8146d568a92fb95db3376.jpg",
+      "type": 0,
+      "id": 9704942,
+      "ga_prefix": "010318",
+      "title": "姜文的前半生"
+    },
+    {
+      "image": "https://pic4.zhimg.com/v2-001b40c36f39cb6dbc0ceadce05de38b.jpg",
+      "type": 0,
+      "id": 9704960,
+      "ga_prefix": "010312",
+      "title": "嫦娥四号成功着陆月球背面，有十大看点你需要知道"
+    }
+  ]
+}
