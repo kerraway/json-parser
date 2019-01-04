@@ -27,12 +27,12 @@ public class Tokenizer {
   private void tokenize() throws IOException {
     Token token;
     do {
-      token = start();
+      token = next();
       tokenHolder.add(token);
     } while (token.getType() != TokenType.END_DOCUMENT);
   }
 
-  private Token start() throws IOException {
+  private Token next() throws IOException {
     char ch;
     do {
       if (!charReader.hasNext()) {
@@ -223,12 +223,37 @@ public class Tokenizer {
     return null;
   }
 
-  private Token readBoolean() {
-    return null;
+  /**
+   * Reads boolean {@link true} or {@link false}, and returns token.
+   *
+   * @return Token
+   * @throws IOException
+   */
+  private Token readBoolean() throws IOException {
+    if (charReader.peek() == 't' && charReader.next() == 'r'
+        && charReader.next() == 'u' && charReader.next() == 'e') {
+      return new Token(TokenType.BOOLEAN, "true");
+    }
+    if (charReader.peek() == 'f' && charReader.next() == 'a'
+        && charReader.next() == 'l' && charReader.next() == 's'
+        && charReader.next() == 'e') {
+      return new Token(TokenType.BOOLEAN, "false");
+    }
+    throw new JsonParseException("Illegal json string, should be \"true\" or \"false\".");
   }
 
-  private Token readNull() {
-    return null;
+  /**
+   * Reads {@link null}, and returns token.
+   *
+   * @return Token
+   * @throws IOException
+   */
+  private Token readNull() throws IOException {
+    if (charReader.peek() == 'n' && charReader.next() == 'u'
+        && charReader.next() == 'l' && charReader.next() == 'l') {
+      return new Token(TokenType.NULL, "null");
+    }
+    throw new JsonParseException("Illegal json string, should be 'null'.");
   }
 
   private boolean isBlank(char ch) {
