@@ -71,9 +71,15 @@ public class Tokenizer {
     }
   }
 
+  /**
+   * Reads number, and returns token.
+   *
+   * @return Token
+   * @throws IOException
+   */
   private Token readNumber() throws IOException {
-    char ch = charReader.peek();
     StringBuilder strBuilder = new StringBuilder();
+    char ch = charReader.peek();
     //negative number
     if (ch == '-') {
       strBuilder.append(ch);
@@ -82,49 +88,49 @@ public class Tokenizer {
         //ch is not digit, throw exception
         throw new JsonParseException(MessageFormat.format("The character '{0}' after '-' is illegal.", ch));
       }
-      //-0.xxx
-      if (ch == '0') {
-        strBuilder.append(ch);
-        strBuilder.append(readFracAndExp());
-      }
-      //-1xxx/-9xxx
-      else {
-        do {
-          strBuilder.append(ch);
-          ch = charReader.next();
-        } while (isDigit(ch));
-
-        //ch is not the end, reader should go back
-        if (ch != (char) -1) {
-          charReader.back();
-          //try read fraction and exponent
-          strBuilder.append(readFracAndExp());
-        }
-      }
+      //fraction -0.xxx or integer number -1xxx/-9xxx
+      strBuilder.append(readFracOrInteger());
     }
-    //fraction 0.xxx
-    else if (ch == '0') {
-      strBuilder.append(ch);
-      strBuilder.append(readFracAndExp());
-    }
-    //number 1xxx/9xxx
+    //fraction 0.xxx or integer number 1xxx/9xxx
     else {
-      do {
-        strBuilder.append(ch);
-        ch = charReader.next();
-      } while (isDigit(ch));
-      //ch is not the end, reader should go back
-      if (ch != (ch) - 1) {
-        charReader.back();
-        //try read fraction and exponent
-        strBuilder.append(readFracAndExp());
-      }
+      strBuilder.append(readFracOrInteger());
     }
     return new Token(TokenType.NUMBER, strBuilder.toString());
   }
 
   /**
-   * Read fraction and exponent into string.
+   * Reads fraction or integer number into string.
+   *
+   * @return String
+   * @throws IOException
+   */
+  private String readFracOrInteger() throws IOException {
+    char ch = charReader.peek();
+    if (!isDigit(ch)) {
+      //ch is not digit, throw exception
+      throw new JsonParseException(MessageFormat.format("The character '{0}' isn't digit.", ch));
+    }
+
+    StringBuilder strBuilder = new StringBuilder();
+    //fraction 0.xxx
+    if (ch == '0') {
+      strBuilder.append(ch).append(readFracAndExp());
+    }
+    //integer number 1xxx/9xxx
+    else {
+      strBuilder.append(readDigit());
+      //ch is not the end, reader should go back
+      if (charReader.hasNext()) {
+        charReader.back();
+        //try read fraction and exponent
+        strBuilder.append(readFracAndExp());
+      }
+    }
+    return strBuilder.toString();
+  }
+
+  /**
+   * Reads fraction and exponent into string.
    *
    * @return String
    */
@@ -139,11 +145,7 @@ public class Tokenizer {
         throw new JsonParseException(MessageFormat.format(
             "The character '{0}' in fraction is illegal.", ch));
       }
-      do {
-        strBuilder.append(ch);
-        ch = charReader.next();
-      } while (isDigit(ch));
-
+      strBuilder.append(readDigit());
       //exponent
       if (isExpSign(ch)) {
         strBuilder.append(ch);
@@ -167,7 +169,7 @@ public class Tokenizer {
   }
 
   /**
-   * Read exponent into string.
+   * Reads exponent into string.
    *
    * @return String
    */
@@ -187,25 +189,28 @@ public class Tokenizer {
       throw new JsonParseException(MessageFormat.format(
           "The character '{0}' after '{1}' is illegal.", ch, strBuilder.toString()));
     }
-
-    // TODO: 2019/1/4 refactor
-    //strBuilder.append(readDigit());
-
-    do {
-      strBuilder.append(ch);
-      ch = charReader.next();
-    } while (isDigit(ch));
-
-    //ch is not the end, reader should go back
-    if (ch != (char) -1) {
+    strBuilder.append(readDigit());
+    //reader has next character, reader should go back
+    if (charReader.hasNext()) {
       charReader.back();
     }
 
     return strBuilder.toString();
   }
 
+  /**
+   * Reads digit into string.
+   *
+   * @return String
+   * @throws IOException
+   */
   private String readDigit() throws IOException {
     char ch = charReader.peek();
+    if (!isDigit(ch)) {
+      //ch is not digit, throw exception
+      throw new JsonParseException(MessageFormat.format("The character '{0}' isn't digit.", ch));
+    }
+
     StringBuilder strBuilder = new StringBuilder();
     do {
       strBuilder.append(ch);

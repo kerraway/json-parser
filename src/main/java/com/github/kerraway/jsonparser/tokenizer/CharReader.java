@@ -61,7 +61,7 @@ public class CharReader {
   /**
    * If buffer has next character, returns true.
    *
-   * @return
+   * @return boolean
    * @throws IOException
    */
   public boolean hasNext() throws IOException {
