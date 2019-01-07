@@ -315,10 +315,22 @@ public class Tokenizer {
     throw new JsonParseException("Illegal json string, should be 'null'.");
   }
 
+  /**
+   * If character is blank, returns true.
+   *
+   * @param ch
+   * @return boolean
+   */
   private boolean isBlank(char ch) {
     return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
   }
 
+  /**
+   * If character is digit, returns true.
+   *
+   * @param ch
+   * @return boolean
+   */
   private boolean isDigit(char ch) {
     return ch >= '0' && ch <= '9';
   }
