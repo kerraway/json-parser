@@ -18,11 +18,24 @@ public class Parser {
 
   private TokenHolder tokenHolder;
 
+  /**
+   * Does parse from token holder's tokens.
+   *
+   * @param tokenHolder must not be {@literal null}.
+   * @return Object
+   */
   public Object parse(TokenHolder tokenHolder) {
+    Assert.notNull(tokenHolder, "tokenHolder must not be null.");
+
     this.tokenHolder = tokenHolder;
     return parse();
   }
 
+  /**
+   * Does parse.
+   *
+   * @return Object
+   */
   private Object parse() {
     Token token = tokenHolder.next();
     //null
@@ -41,7 +54,7 @@ public class Parser {
   }
 
   /**
-   * Parse object.
+   * Parses object.
    *
    * @return JsonObject
    */
@@ -106,7 +119,7 @@ public class Parser {
   }
 
   /**
-   * Parse number.
+   * Parses number.
    *
    * @param str must not be {@literal null}.
    * @return Number
@@ -129,7 +142,7 @@ public class Parser {
   }
 
   /**
-   * Assert token type, if actual is invalid, throw {@link JsonParseException}.
+   * Asserts token type, if actual is invalid, throw {@link JsonParseException}.
    *
    * @param expectedTokenTypes must not be {@literal empty}.
    * @param actualTokenType    must not be {@literal null}.
