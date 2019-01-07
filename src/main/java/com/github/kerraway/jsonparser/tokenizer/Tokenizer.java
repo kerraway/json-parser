@@ -14,6 +14,13 @@ public class Tokenizer {
   private CharReader charReader;
   private TokenHolder tokenHolder;
 
+  /**
+   * Tokenizes reader's content, and returns token holder.
+   *
+   * @param charReader
+   * @return TokenHolder
+   * @throws IOException
+   */
   public TokenHolder tokenize(CharReader charReader) throws IOException {
     this.charReader = charReader;
     this.tokenHolder = new TokenHolder();
@@ -24,6 +31,11 @@ public class Tokenizer {
     return tokenHolder;
   }
 
+  /**
+   * Gets next token and add into token holder.
+   *
+   * @throws IOException
+   */
   private void tokenize() throws IOException {
     Token token;
     do {
@@ -32,6 +44,12 @@ public class Tokenizer {
     } while (token.getType() != TokenType.END_DOCUMENT);
   }
 
+  /**
+   * Gets next token.
+   *
+   * @return Token
+   * @throws IOException
+   */
   private Token next() throws IOException {
     char ch;
     do {
@@ -219,8 +237,49 @@ public class Tokenizer {
     return strBuilder.toString();
   }
 
-  private Token readString() {
-    return null;
+  /**
+   * Reads string, and returns token.
+   *
+   * @return Token
+   * @throws IOException
+   */
+  private Token readString() throws IOException {
+    StringBuilder strBuilder = new StringBuilder();
+    char ch;
+    do {
+      ch = charReader.next();
+      //escape string
+      if (ch == '\\') {
+        ch = charReader.next();
+        String str = new String(new char[]{'\\', ch});
+        if (!isEscapeString(str)) {
+          throw new JsonParseException(MessageFormat.format("Illegal escape string: \"{0}\".", str));
+        }
+        strBuilder.append(str);
+
+        //unicode string, [\u0000, \uFFFF]
+        if (str.equals("\\u")) {
+          StringBuilder hexStrBuilder = new StringBuilder();
+          for (int i = 0; i < 4; i++) {
+            ch = charReader.next();
+            hexStrBuilder.append(ch);
+          }
+          if (!isHexString(hexStrBuilder.toString())) {
+            throw new JsonParseException(MessageFormat.format("Illegal hex string: \"{0}\".", hexStrBuilder));
+          }
+          strBuilder.append(hexStrBuilder);
+        }
+      }
+      //TODO newline isn't supported
+      else if (ch == '\r' || ch == '\n') {
+        throw new JsonParseException("Newline isn't supported.");
+      }
+      //others
+      else {
+        strBuilder.append(ch);
+      }
+    } while (ch != '"');
+    return new Token(TokenType.STRING, strBuilder.toString());
   }
 
   /**
@@ -264,11 +323,6 @@ public class Tokenizer {
     return ch >= '0' && ch <= '9';
   }
 
-  // TODO: 2019/1/4 remove
-  private boolean isDigitOneToNine(char ch) {
-    return ch >= '1' && ch <= '9';
-  }
-
   /**
    * If character is exponent sign e/E, returns true.
    *
@@ -276,6 +330,40 @@ public class Tokenizer {
    */
   private boolean isExpSign(char ch) {
     return ch == 'e' || ch == 'E';
+  }
+
+  /**
+   * If string is escape string, returns true.
+   *
+   * @param str
+   * @return boolean
+   */
+  private boolean isEscapeString(String str) {
+    return str != null && (str.equals("\"") || str.equals("\\'")
+        || str.equals("\\\\") || str.equals("\\u") || str.equals("\\r")
+        || str.equals("\\n") || str.equals("\\b") || str.equals("\\t")
+        || str.equals("\\f") || str.equals("\\/"));
+  }
+
+  /**
+   * If string is hex string, returns true.
+   *
+   * @param str
+   * @return boolean
+   */
+  private boolean isHexString(String str) {
+    if (str == null || str.length() != 4) {
+      return false;
+    }
+    for (int i = 0; i < str.length(); i++) {
+      char ch = str.charAt(i);
+      boolean isHexChar = (ch >= '0' && ch <= '9')
+          || ('a' <= ch && ch <= 'f') || ('A' <= ch && ch <= 'F');
+      if (!isHexChar) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }
