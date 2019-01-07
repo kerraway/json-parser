@@ -24,6 +24,15 @@ public class TokenHolder {
   }
 
   /**
+   * Gets size of tokens.
+   *
+   * @return int
+   */
+  public int size() {
+    return tokens.size();
+  }
+
+  /**
    * Adds token instance into tokens.
    *
    * @param token

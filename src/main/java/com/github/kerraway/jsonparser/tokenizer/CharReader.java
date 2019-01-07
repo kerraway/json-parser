@@ -10,43 +10,47 @@ import java.io.Reader;
 public class CharReader {
 
   private static final int BUFFER_SIZE = 4096;
+  private static final int CURSOR_INITIAL_VALUE = -1;
 
   private Reader reader;
   private char[] buffer;
-  private int index;
   private int size;
+  private int cursor;
 
   public CharReader(Reader reader) {
     this.reader = reader;
     this.buffer = new char[BUFFER_SIZE];
-    this.index = 0;
     this.size = 0;
+    this.cursor = CURSOR_INITIAL_VALUE;
   }
 
   /**
-   * Peeks the character at the index of buffer.
+   * Peeks the character at the cursor of buffer.
    *
    * @return char
    */
   public char peek() {
-    if (index > size) {
+    if (cursor >= size) {
       return (char) -1;
     }
-    return buffer[index];
+    if (cursor == CURSOR_INITIAL_VALUE) {
+      return buffer[0];
+    }
+    return buffer[cursor];
   }
 
   /**
-   * If index is greater than 0, decreases index.
+   * If cursor is greater than 0, decreases cursor.
    */
   public void back() {
-    if (index == 0) {
+    if (cursor == CURSOR_INITIAL_VALUE) {
       return;
     }
-    index--;
+    cursor = cursor - 1;
   }
 
   /**
-   * If has next character, returns it, and increases index.
+   * If has next character, returns it, and increases cursor.
    *
    * @return char
    * @throws IOException
@@ -55,7 +59,8 @@ public class CharReader {
     if (!hasNext()) {
       return (char) -1;
     }
-    return buffer[index++];
+    cursor = cursor + 1;
+    return buffer[cursor];
   }
 
   /**
@@ -65,11 +70,11 @@ public class CharReader {
    * @throws IOException
    */
   public boolean hasNext() throws IOException {
-    if (index < size) {
+    if (size > cursor + 1) {
       return true;
     }
     fillBuffer();
-    return index < size;
+    return size > cursor + 1;
   }
 
   /**
@@ -82,7 +87,7 @@ public class CharReader {
     if (n == -1) {
       return;
     }
-    index = 0;
+    cursor = CURSOR_INITIAL_VALUE;
     size = n;
   }
 

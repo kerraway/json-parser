@@ -85,7 +85,7 @@ public class Tokenizer {
         if (isDigit(ch)) {
           return readNumber();
         }
-        throw new JsonParseException(MessageFormat.format("Illegal character: '{0}'.", ch));
+        throw new JsonParseException(MessageFormat.format("Illegal character: ''{0}''.", ch));
     }
   }
 
@@ -104,7 +104,7 @@ public class Tokenizer {
       ch = charReader.next();
       if (!isDigit(ch)) {
         //ch is not digit, throw exception
-        throw new JsonParseException(MessageFormat.format("The character '{0}' after '-' is illegal.", ch));
+        throw new JsonParseException(MessageFormat.format("The character ''{0}'' after ''-'' is illegal.", ch));
       }
       //fraction -0.xxx or integer number -1xxx/-9xxx
       strBuilder.append(readFracOrInteger());
@@ -126,7 +126,7 @@ public class Tokenizer {
     char ch = charReader.peek();
     if (!isDigit(ch)) {
       //ch is not digit, throw exception
-      throw new JsonParseException(MessageFormat.format("The character '{0}' isn't digit.", ch));
+      throw new JsonParseException(MessageFormat.format("The character ''{0}'' isn''t digit.", ch));
     }
 
     StringBuilder strBuilder = new StringBuilder();
@@ -138,7 +138,7 @@ public class Tokenizer {
     else {
       strBuilder.append(readDigit());
       //ch is not the end, reader should go back
-      if (charReader.hasNext()) {
+      if (charReader.peek() != (char) -1) {
         charReader.back();
         //try read fraction and exponent
         strBuilder.append(readFracAndExp());
@@ -161,7 +161,7 @@ public class Tokenizer {
       ch = charReader.next();
       if (!isDigit(ch)) {
         throw new JsonParseException(MessageFormat.format(
-            "The character '{0}' in fraction is illegal.", ch));
+            "The character ''{0}'' in fraction is illegal.", ch));
       }
       strBuilder.append(readDigit());
       //exponent
@@ -195,7 +195,7 @@ public class Tokenizer {
     char ch = charReader.next();
     if (ch != '+' && ch != '-') {
       //ch is not '+' or '-', throw exception
-      throw new JsonParseException(MessageFormat.format("The character '{0}' after 'e' or 'E' is illegal.", ch));
+      throw new JsonParseException(MessageFormat.format("The character ''{0}'' after ''e'' or ''E'' is illegal.", ch));
     }
 
     StringBuilder strBuilder = new StringBuilder();
@@ -205,11 +205,11 @@ public class Tokenizer {
     if (!isDigit(ch)) {
       //ch is not digit, throw exception
       throw new JsonParseException(MessageFormat.format(
-          "The character '{0}' after '{1}' is illegal.", ch, strBuilder.toString()));
+          "The character ''{0}'' after ''{1}'' is illegal.", ch, strBuilder.toString()));
     }
     strBuilder.append(readDigit());
     //reader has next character, reader should go back
-    if (charReader.hasNext()) {
+    if (charReader.peek() != (char) -1) {
       charReader.back();
     }
 
@@ -226,7 +226,7 @@ public class Tokenizer {
     char ch = charReader.peek();
     if (!isDigit(ch)) {
       //ch is not digit, throw exception
-      throw new JsonParseException(MessageFormat.format("The character '{0}' isn't digit.", ch));
+      throw new JsonParseException(MessageFormat.format("The character ''{0}'' isn''t digit.", ch));
     }
 
     StringBuilder strBuilder = new StringBuilder();
