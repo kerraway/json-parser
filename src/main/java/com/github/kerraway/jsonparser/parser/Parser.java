@@ -72,7 +72,7 @@ public class Parser {
           expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
           break;
         case END_OBJECT:
-          break;
+          return jsonObject;
         case BEGIN_ARRAY:
           jsonObject.put(key, parseArray());
           expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
@@ -110,12 +110,12 @@ public class Parser {
           expected = new TokenType[]{TokenType.STRING};
           break;
         case END_DOCUMENT:
-          break;
+          return jsonObject;
         default:
           throw new JsonParseException(MessageFormat.format("Unexpected token type: {}.", tokenType));
       }
     }
-    return jsonObject;
+    throw new JsonParseException("Parse json object error.");
   }
 
   /**
@@ -137,8 +137,54 @@ public class Parser {
     return longVal.intValue();
   }
 
+  /**
+   * Parses array.
+   *
+   * @return JsonArray
+   */
   private JsonArray parseArray() {
-    return null;
+    JsonArray jsonArray = new JsonArray();
+    TokenType[] expected = {TokenType.BEGIN_ARRAY, TokenType.END_ARRAY, TokenType.BEGIN_OBJECT,
+        TokenType.NULL, TokenType.NUMBER, TokenType.BOOLEAN, TokenType.STRING};
+    String key = null;
+    while (tokenHolder.hasNext()) {
+      Token token = tokenHolder.next();
+      TokenType tokenType = token.getType();
+      assertTokenType(expected, tokenType);
+      switch (tokenType) {
+        case BEGIN_OBJECT:
+          jsonArray.add(parseObject());
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
+        case BEGIN_ARRAY:
+          jsonArray.add(parseArray());
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
+        case END_ARRAY:
+          return jsonArray;
+        case NULL:
+          jsonArray.add(null);
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
+        case NUMBER:
+          jsonArray.add(parseNumber(token.getValue()));
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
+        case STRING:
+          jsonArray.add(token.getValue());
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
+        case SEP_COMMA:
+          expected = new TokenType[]{TokenType.STRING, TokenType.NUMBER,
+              TokenType.BOOLEAN, TokenType.BEGIN_ARRAY, TokenType.BEGIN_OBJECT};
+          break;
+        case END_DOCUMENT:
+          return jsonArray;
+        default:
+          throw new JsonParseException(MessageFormat.format("Unexpected token type: {}.", tokenType));
+      }
+    }
+    throw new JsonParseException("Parse json array error.");
   }
 
   /**
