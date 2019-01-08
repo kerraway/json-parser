@@ -17,31 +17,31 @@ public class JsonParserTest {
   @Test
   public void fromJsonTest1() throws IOException {
     JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_1);
-    System.out.println("jsonObject = " + jsonObject);
+    System.out.println(jsonObject);
   }
 
   @Test
   public void fromJsonTest2() throws IOException {
     JsonArray jsonArray = (JsonArray) fromJson(JSON_CASE_2);
-    System.out.println("jsonArray = " + jsonArray);
+    System.out.println(jsonArray);
   }
 
   @Test
   public void fromJsonTest3() throws IOException {
     JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_3);
-    System.out.println("jsonObject = " + jsonObject);
+    System.out.println(jsonObject);
   }
 
   @Test
   public void fromJsonTest4() throws IOException {
     JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_4);
-    System.out.println("jsonObject = " + jsonObject);
+    System.out.println(jsonObject);
   }
 
   @Test
   public void fromJsonTest5() throws IOException {
     JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_5);
-    System.out.println("jsonObject = " + jsonObject);
+    System.out.println(jsonObject);
   }
 
   private Object fromJson(String json) throws IOException {
