@@ -18,9 +18,12 @@ public class TokenizerTest {
   public void tokenizeTest1() throws IOException {
     TokenHolder tokenHolder = tokenize(JSON_CASE_1);
     assertEquals(6, tokenHolder.size());
-    // TODO: 2019/1/7 fix
-//    assertEquals(TokenType.BEGIN_OBJECT, tokenHolder.current().getType());
-//    assertEquals(TokenType.STRING, tokenHolder.next().getType());
+    assertEquals(TokenType.BEGIN_OBJECT, tokenHolder.next().getType());
+    assertEquals(TokenType.STRING, tokenHolder.next().getType());
+    assertEquals(TokenType.SEP_COLON, tokenHolder.next().getType());
+    assertEquals(TokenType.NUMBER, tokenHolder.next().getType());
+    assertEquals(TokenType.END_OBJECT, tokenHolder.next().getType());
+    assertEquals(TokenType.END_DOCUMENT, tokenHolder.next().getType());
   }
 
   @Test

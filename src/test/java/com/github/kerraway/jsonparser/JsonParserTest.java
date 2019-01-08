@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.github.kerraway.jsonparser.constant.JsonCases.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author kerraway
@@ -17,6 +18,7 @@ public class JsonParserTest {
   @Test
   public void fromJsonTest1() throws IOException {
     JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_1);
+    assertEquals(123, jsonObject.get("field"));
     System.out.println(jsonObject);
   }
 
