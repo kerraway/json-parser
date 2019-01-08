@@ -246,8 +246,7 @@ public class Tokenizer {
   private Token readString() throws IOException {
     StringBuilder strBuilder = new StringBuilder();
     char ch;
-    do {
-      ch = charReader.next();
+    while ((ch = charReader.next()) != '"') {
       //escape string
       if (ch == '\\') {
         ch = charReader.next();
@@ -278,7 +277,7 @@ public class Tokenizer {
       else {
         strBuilder.append(ch);
       }
-    } while (ch != '"');
+    }
     return new Token(TokenType.STRING, strBuilder.toString());
   }
 

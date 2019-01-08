@@ -50,7 +50,7 @@ public class Parser {
     if (token.getType() == TokenType.BEGIN_ARRAY) {
       return parseArray();
     }
-    throw new JsonParseException(MessageFormat.format("Unexpected token type: {} at begin.", token.getType()));
+    throw new JsonParseException(MessageFormat.format("Unexpected token type: {0} at begin.", token.getType()));
   }
 
   /**
@@ -112,7 +112,7 @@ public class Parser {
         case END_DOCUMENT:
           return jsonObject;
         default:
-          throw new JsonParseException(MessageFormat.format("Unexpected token type: {}.", tokenType));
+          throw new JsonParseException(MessageFormat.format("Unexpected token type: {0}.", tokenType));
       }
     }
     throw new JsonParseException("Parse json object error.");
@@ -181,7 +181,7 @@ public class Parser {
         case END_DOCUMENT:
           return jsonArray;
         default:
-          throw new JsonParseException(MessageFormat.format("Unexpected token type: {}.", tokenType));
+          throw new JsonParseException(MessageFormat.format("Unexpected token type: {0}.", tokenType));
       }
     }
     throw new JsonParseException("Parse json array error.");
@@ -202,7 +202,7 @@ public class Parser {
       expectedCode = expectedCode | expectedTokenTypes[i].getCode();
     }
     if ((actualTokenType.getCode() & expectedCode) == 0) {
-      throw new JsonParseException(MessageFormat.format("Unexpected token type: {}.", actualTokenType));
+      throw new JsonParseException(MessageFormat.format("Unexpected token type: {0}.", actualTokenType));
     }
   }
 

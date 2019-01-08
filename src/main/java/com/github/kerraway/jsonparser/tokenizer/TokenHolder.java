@@ -10,13 +10,14 @@ import java.util.List;
 public class TokenHolder {
 
   private static final int DEFAULT_INIT_CAPACITY = 256;
+  private static final int CURSOR_INITIAL_VALUE = -1;
 
   private List<Token> tokens;
-  private int index;
+  private int cursor;
 
   public TokenHolder(int capacity) {
     this.tokens = new ArrayList<>(capacity);
-    this.index = 0;
+    this.cursor = CURSOR_INITIAL_VALUE;
   }
 
   public TokenHolder() {
@@ -42,45 +43,49 @@ public class TokenHolder {
   }
 
   /**
-   * Gets current token at the index of tokens.
+   * Gets current token at the cursor of tokens.
    *
    * @return Token
    */
   public Token current() {
-    if (index >= tokens.size()) {
+    if (cursor < 0 || cursor >= tokens.size()) {
       return null;
     }
-    return tokens.get(index);
+    return tokens.get(cursor);
   }
 
   /**
-   * Gets previous token at the index of tokens.
+   * Gets previous token at the cursor of tokens.
    *
    * @return Token
    */
   public Token previous() {
-    if (index == 0) {
+    if (cursor <= 0) {
       return null;
     }
-    return tokens.get(index - 1);
+    return tokens.get(cursor - 1);
   }
 
   /**
-   * Gets next token at the index of tokens, and increases index.
+   * Gets next token at the cursor of tokens, and increases cursor.
    *
    * @return Token
    */
   public Token next() {
-    return tokens.get(++index);
+    if (!hasNext()) {
+      return null;
+    }
+    cursor = cursor + 1;
+    return tokens.get(cursor);
   }
 
   /**
-   * If has next token at the index of tokens, returns true.
+   * If has next token at the cursor of tokens, returns true.
    *
    * @return boolean
    */
   public boolean hasNext() {
-    return index + 1 < tokens.size();
+    return cursor + 1 < tokens.size();
   }
 
   @Override
