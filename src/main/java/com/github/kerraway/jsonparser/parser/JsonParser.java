@@ -1,4 +1,4 @@
-package com.github.kerraway.jsonparser;
+package com.github.kerraway.jsonparser.parser;
 
 import com.github.kerraway.jsonparser.parser.Parser;
 import com.github.kerraway.jsonparser.tokenizer.CharReader;
