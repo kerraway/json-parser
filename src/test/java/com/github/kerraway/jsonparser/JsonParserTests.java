@@ -11,6 +11,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     TokenizerTest.class,
+    JsonParserTest.class,
 })
 public class JsonParserTests {
 }

@@ -170,12 +170,16 @@ public class Parser {
           jsonArray.add(parseNumber(token.getValue()));
           expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
           break;
+        case BOOLEAN:
+          jsonArray.add(Boolean.valueOf(token.getValue()));
+          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          break;
         case STRING:
           jsonArray.add(token.getValue());
           expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
           break;
         case SEP_COMMA:
-          expected = new TokenType[]{TokenType.STRING, TokenType.NUMBER,
+          expected = new TokenType[]{TokenType.STRING, TokenType.NULL, TokenType.NUMBER,
               TokenType.BOOLEAN, TokenType.BEGIN_ARRAY, TokenType.BEGIN_OBJECT};
           break;
         case END_DOCUMENT:

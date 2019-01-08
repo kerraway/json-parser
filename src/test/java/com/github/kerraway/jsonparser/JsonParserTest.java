@@ -30,6 +30,18 @@ public class JsonParserTest {
     System.out.println("jsonObject = " + jsonObject);
   }
 
+  @Test
+  public void fromJsonTest4() throws IOException {
+    JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_4);
+    System.out.println("jsonObject = " + jsonObject);
+  }
+
+  @Test
+  public void fromJsonTest5() throws IOException {
+    JsonObject jsonObject = (JsonObject) fromJson(JSON_CASE_5);
+    System.out.println("jsonObject = " + jsonObject);
+  }
+
   private Object fromJson(String json) throws IOException {
     JsonParser jsonParser = new JsonParser();
     return jsonParser.fromJson(json);
