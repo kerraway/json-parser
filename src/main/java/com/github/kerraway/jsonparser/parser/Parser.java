@@ -1,6 +1,8 @@
 package com.github.kerraway.jsonparser.parser;
 
 import com.github.kerraway.jsonparser.exception.JsonParseException;
+import com.github.kerraway.jsonparser.jsontype.JsonArray;
+import com.github.kerraway.jsonparser.jsontype.JsonObject;
 import com.github.kerraway.jsonparser.tokenizer.Token;
 import com.github.kerraway.jsonparser.tokenizer.TokenHolder;
 import com.github.kerraway.jsonparser.tokenizer.TokenType;
@@ -13,6 +15,15 @@ import java.text.MessageFormat;
  * @date 2019/1/7
  */
 public class Parser {
+
+  /**
+   * Common expected for json object: {@link TokenType#SEP_COMMA} or {@link TokenType#END_OBJECT}
+   */
+  private static final int COMMON_EXPECTED_FOR_JSON_OBJECT = TokenType.SEP_COMMA.getCode() | TokenType.END_OBJECT.getCode();
+  /**
+   * Common expected for json object: {@link TokenType#SEP_COMMA} or {@link TokenType#END_ARRAY}
+   */
+  private static final int COMMON_EXPECTED_FOR_JSON_ARRAY = TokenType.SEP_COMMA.getCode() | TokenType.END_ARRAY.getCode();
 
   private TokenHolder tokenHolder;
 
@@ -58,7 +69,7 @@ public class Parser {
    */
   private JsonObject parseObject() {
     JsonObject jsonObject = new JsonObject();
-    TokenType[] expected = {TokenType.STRING, TokenType.END_OBJECT};
+    int expected = TokenType.STRING.getCode() | TokenType.END_OBJECT.getCode();
     String key = null;
     while (tokenHolder.hasNext()) {
       Token token = tokenHolder.next();
@@ -67,45 +78,45 @@ public class Parser {
       switch (tokenType) {
         case BEGIN_OBJECT:
           jsonObject.put(key, parseObject());
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+          expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           break;
         case END_OBJECT:
           return jsonObject;
         case BEGIN_ARRAY:
           jsonObject.put(key, parseArray());
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+          expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           break;
         case NULL:
           jsonObject.put(key, null);
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+          expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           break;
         case NUMBER:
           jsonObject.put(key, parseNumber(token.getValue()));
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+          expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           break;
         case BOOLEAN:
           jsonObject.put(key, Boolean.valueOf(token.getValue()));
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+          expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           break;
         case STRING:
           Token prevToken = tokenHolder.previous();
           //value
           if (prevToken.getType() == TokenType.SEP_COLON) {
             jsonObject.put(key, token.getValue());
-            expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_OBJECT};
+            expected = COMMON_EXPECTED_FOR_JSON_OBJECT;
           }
           //key
           else {
             key = token.getValue();
-            expected = new TokenType[]{TokenType.SEP_COLON};
+            expected = TokenType.SEP_COLON.getCode();
           }
           break;
         case SEP_COLON:
-          expected = new TokenType[]{TokenType.NULL, TokenType.NUMBER, TokenType.BOOLEAN,
-              TokenType.STRING, TokenType.BEGIN_OBJECT, TokenType.BEGIN_ARRAY};
+          expected = TokenType.NULL.getCode() | TokenType.NUMBER.getCode() | TokenType.BOOLEAN.getCode()
+              | TokenType.STRING.getCode() | TokenType.BEGIN_OBJECT.getCode() | TokenType.BEGIN_ARRAY.getCode();
           break;
         case SEP_COMMA:
-          expected = new TokenType[]{TokenType.STRING};
+          expected = TokenType.STRING.getCode();
           break;
         case END_DOCUMENT:
           return jsonObject;
@@ -142,8 +153,8 @@ public class Parser {
    */
   private JsonArray parseArray() {
     JsonArray jsonArray = new JsonArray();
-    TokenType[] expected = {TokenType.BEGIN_ARRAY, TokenType.END_ARRAY, TokenType.BEGIN_OBJECT,
-        TokenType.NULL, TokenType.NUMBER, TokenType.BOOLEAN, TokenType.STRING};
+    int expected = TokenType.BEGIN_ARRAY.getCode() | TokenType.END_ARRAY.getCode() | TokenType.BEGIN_OBJECT.getCode()
+        | TokenType.NULL.getCode() | TokenType.NUMBER.getCode() | TokenType.BOOLEAN.getCode() | TokenType.STRING.getCode();
     String key = null;
     while (tokenHolder.hasNext()) {
       Token token = tokenHolder.next();
@@ -152,33 +163,33 @@ public class Parser {
       switch (tokenType) {
         case BEGIN_OBJECT:
           jsonArray.add(parseObject());
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case BEGIN_ARRAY:
           jsonArray.add(parseArray());
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case END_ARRAY:
           return jsonArray;
         case NULL:
           jsonArray.add(null);
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case NUMBER:
           jsonArray.add(parseNumber(token.getValue()));
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case BOOLEAN:
           jsonArray.add(Boolean.valueOf(token.getValue()));
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case STRING:
           jsonArray.add(token.getValue());
-          expected = new TokenType[]{TokenType.SEP_COMMA, TokenType.END_ARRAY};
+          expected = COMMON_EXPECTED_FOR_JSON_ARRAY;
           break;
         case SEP_COMMA:
-          expected = new TokenType[]{TokenType.STRING, TokenType.NULL, TokenType.NUMBER,
-              TokenType.BOOLEAN, TokenType.BEGIN_ARRAY, TokenType.BEGIN_OBJECT};
+          expected = TokenType.STRING.getCode() | TokenType.NULL.getCode() | TokenType.NUMBER.getCode()
+              | TokenType.BOOLEAN.getCode() | TokenType.BEGIN_ARRAY.getCode() | TokenType.BEGIN_OBJECT.getCode();
           break;
         case END_DOCUMENT:
           return jsonArray;
@@ -192,17 +203,12 @@ public class Parser {
   /**
    * Asserts token type, if actual is invalid, throw {@link JsonParseException}.
    *
-   * @param expectedTokenTypes must not be {@literal empty}.
-   * @param actualTokenType    must not be {@literal null}.
+   * @param expectedCode    must not be {@literal null}.
+   * @param actualTokenType must not be {@literal null}.
    */
-  private void assertTokenType(TokenType[] expectedTokenTypes, TokenType actualTokenType) {
-    Assert.notEmpty(expectedTokenTypes, "expectedTokenTypes must not be empty.");
+  private void assertTokenType(int expectedCode, TokenType actualTokenType) {
     Assert.notNull(actualTokenType, "actualTokenType must not be null.");
 
-    int expectedCode = expectedTokenTypes[0].getCode();
-    for (int i = 1; i < expectedTokenTypes.length; i++) {
-      expectedCode = expectedCode | expectedTokenTypes[i].getCode();
-    }
     if ((actualTokenType.getCode() & expectedCode) == 0) {
       throw new JsonParseException(MessageFormat.format("Unexpected token type: {0}.", actualTokenType));
     }
