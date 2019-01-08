@@ -7,9 +7,9 @@ Json 格式是 1999 年《JavaScript Programming Language, Standard ECMA-262 3rd
 Json 用于描述资料结构，有两种结构存在：
 - 对象（object）：一个对象包含一系列非排序的名称／值对（pair），一个对象以 `{` 开始，并以 `}` 结束。每个名称／值对之间使用 `:` 分割。
 ```json
-{name1: value1, name2: value2}
+{"name1": 123, "name2": "string"}
 ```
 - 数组（array）：一个数组是一个值（value）的集合，一个数组以 `[` 开始，并以 `]` 结束。数组成员之间使用 `,` 分割。
 ```json
-[value1, value2]
+[123, false, "string"]
 ```
