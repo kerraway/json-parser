@@ -1,4 +1,4 @@
-package com.github.kerraway.jsonparser.jsontype;
+package com.github.kerraway.jsonparser.parser;
 
 import java.util.ArrayList;
 import java.util.List;

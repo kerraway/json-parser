@@ -1,8 +1,6 @@
 package com.github.kerraway.jsonparser.parser;
 
 import com.github.kerraway.jsonparser.exception.JsonParseException;
-import com.github.kerraway.jsonparser.jsontype.JsonArray;
-import com.github.kerraway.jsonparser.jsontype.JsonObject;
 import com.github.kerraway.jsonparser.tokenizer.Token;
 import com.github.kerraway.jsonparser.tokenizer.TokenHolder;
 import com.github.kerraway.jsonparser.tokenizer.TokenType;

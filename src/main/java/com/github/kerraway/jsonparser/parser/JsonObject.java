@@ -1,4 +1,4 @@
-package com.github.kerraway.jsonparser.jsontype;
+package com.github.kerraway.jsonparser.parser;
 
 import com.github.kerraway.jsonparser.exception.JsonTypeException;
 

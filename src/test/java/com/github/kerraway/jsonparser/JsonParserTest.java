@@ -1,7 +1,7 @@
 package com.github.kerraway.jsonparser;
 
-import com.github.kerraway.jsonparser.jsontype.JsonArray;
-import com.github.kerraway.jsonparser.jsontype.JsonObject;
+import com.github.kerraway.jsonparser.parser.JsonArray;
+import com.github.kerraway.jsonparser.parser.JsonObject;
 import org.junit.Test;
 
 import java.io.IOException;
