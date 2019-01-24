@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * File utils
  *
- * @author 小柯
+ * @author kerraway
  * @date 2019/1/7
  */
 public class FileUtils {
